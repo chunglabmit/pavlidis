@@ -7,4 +7,4 @@ install:
   - pip install --editable .
   - pip install nose
 script:
-  - nosetests tests
+  - nosetests test
