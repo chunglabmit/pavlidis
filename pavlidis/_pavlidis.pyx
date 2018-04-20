@@ -39,7 +39,7 @@ cdef uint8_t get_pixel(uint8_t [:, :] array, int row, int column) nogil:
     return array[row, column]
 
 cdef void pavlidis_impl(uint8_t [:, :] array, int seed_row, int seed_column,
-                        vector[pair[size_t, size_t]] &coords):
+                        vector[pair[size_t, size_t]] &coords) nogil:
      cdef:
          int n_turns
          pair[size_t, size_t] current
@@ -51,7 +51,6 @@ cdef void pavlidis_impl(uint8_t [:, :] array, int seed_row, int seed_column,
      coords.push_back(current)
      n_turns = 0
      while True:
-         print("y=%d, x=%d, direction=%d" % (current.first, current.second, direction))
          if direction == 0: # -x
              if get_pixel(array, current.first+1, current.second-1):
                  direction = 3
@@ -118,6 +117,5 @@ cdef void pavlidis_impl(uint8_t [:, :] array, int seed_row, int seed_column,
                  continue
          n_turns = 0
          if current.first == seed_row and current.second == seed_column:
-             print("Exiting: y=%d, x=%d, direction=%d" % (current.first, current.second, direction))
              break
          coords.push_back(current)
