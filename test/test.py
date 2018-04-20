@@ -36,6 +36,10 @@ class TestPavlidis(unittest.TestCase):
         self.assertEqual(result[0, 0], 1)
         self.assertEqual(result[0, 1], 1)
 
+    def test_interior_raises(self):
+        case = np.ones((3, 3), bool)
+        self.assertRaises(BaseException, pavlidis, case, 1, 1)
+
     # The test names check the p1, p2 and p3 cases for the directions,
     # xn (going towards -x), yn, xp and yp
     #
@@ -246,6 +250,14 @@ class TestPavlidis(unittest.TestCase):
         small[1, 1] = True
         small[2, 1] = True
         self.assertEqual(len(pavlidis(small, 1, 1)), 2)
+
+    def test_issue2_regression(self):
+        small = np.zeros((10, 10))
+        small[4, 5:] = True
+        small[5, 4:] = True
+        small[6, 3:] = True
+        small[7, 2:] = True
+        self.assertGreater(len(pavlidis(small, 4, 5)), 4)
 
 if __name__ == '__main__':
     unittest.main()

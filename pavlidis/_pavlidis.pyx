@@ -22,8 +22,29 @@ def pavlidis(uint8_t [:, :] array, int seed_row, int seed_column):
     cdef:
         vector[pair[size_t, size_t]] coords
         int i
+        int direction
         uint32_t [:, :] presult
-    pavlidis_impl(array, seed_row, seed_column, coords)
+    if not get_pixel(array, seed_row, seed_column):
+        raise AssertionError("Seed pixel is not within an object")
+    #
+    # Check for interior pixel
+    #
+    if get_pixel(array, seed_row-1, seed_column) and \
+       get_pixel(array, seed_row, seed_column+1) and \
+       get_pixel(array, seed_row+1, seed_column) and \
+       get_pixel(array, seed_row, seed_column-1):
+       raise AssertionError("Seed pixel is in interior of object")
+    #
+    # Set the initial direction so that p1 is not true.
+    #
+    direction = 0
+    if get_pixel(array, seed_row+1, seed_column-1):
+        direction = 1
+        if get_pixel(array, seed_row-1, seed_column-1):
+            direction = 2
+            if get_pixel(array, seed_row-1, seed_column+1):
+                direction = 3
+    pavlidis_impl(array, seed_row, seed_column, coords, direction)
     result = np.zeros((coords.size(), 2), np.uint32)
     presult = result
     for 0 <= i < coords.size():
@@ -39,18 +60,21 @@ cdef uint8_t get_pixel(uint8_t [:, :] array, int row, int column) nogil:
     return array[row, column]
 
 cdef void pavlidis_impl(uint8_t [:, :] array, int seed_row, int seed_column,
-                        vector[pair[size_t, size_t]] &coords) nogil:
+                        vector[pair[size_t, size_t]] &coords,
+                        int initial_dir):
      cdef:
          int n_turns
          pair[size_t, size_t] current
          int row, column
-         int direction = 0 # directions are 0 = -x, 1 = -y, 2 = x, 3 = y
+         int direction = initial_dir
 
      current.first = seed_row
      current.second = seed_column
      coords.push_back(current)
      n_turns = 0
      while True:
+         print("i=%d, j=%d, direction=%d" %
+               (current.first, current.second, direction))
          if direction == 0: # -x
              if get_pixel(array, current.first+1, current.second-1):
                  direction = 3
