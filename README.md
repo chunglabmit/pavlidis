@@ -1,4 +1,7 @@
 # pavlidis
+
+[![Travis CI Status](https://travis-ci.org/chunglabmit/phathom.svg?branch=master)](https://travis-ci.org/chunglabmit/pavlidis)
+
 The Pavlidis algorithm for contour tracing
 
 This algorithm traces the contour of a binary
