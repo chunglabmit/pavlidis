@@ -241,5 +241,11 @@ class TestPavlidis(unittest.TestCase):
         self.assertEqual(result[4, 0], 3)
         self.assertEqual(result[4, 1], 1)
 
+    def test_issue1_regression(self):
+        small = np.zeros((4, 4))
+        small[1, 1] = True
+        small[2, 1] = True
+        self.assertEqual(len(pavlidis(small, 1, 1)), 2)
+
 if __name__ == '__main__':
     unittest.main()

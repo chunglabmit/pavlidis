@@ -64,7 +64,7 @@ cdef void pavlidis_impl(uint8_t [:, :] array, int seed_row, int seed_column,
              else:
                  direction = 1
                  n_turns += 1
-                 if n_turns == 3:
+                 if n_turns == 4:
                      break
                  continue
          elif direction == 1: # -y
@@ -80,7 +80,7 @@ cdef void pavlidis_impl(uint8_t [:, :] array, int seed_row, int seed_column,
              else:
                  direction = 2
                  n_turns += 1
-                 if n_turns == 3:
+                 if n_turns == 4:
                      break
                  continue
          elif direction == 2: # +x
@@ -96,7 +96,7 @@ cdef void pavlidis_impl(uint8_t [:, :] array, int seed_row, int seed_column,
              else:
                  direction = 3
                  n_turns += 1
-                 if n_turns == 3:
+                 if n_turns == 4:
                      break
                  continue
          else: # +y
@@ -112,7 +112,7 @@ cdef void pavlidis_impl(uint8_t [:, :] array, int seed_row, int seed_column,
              else:
                  direction = 0
                  n_turns += 1
-                 if n_turns == 3:
+                 if n_turns == 4:
                      break
                  continue
          n_turns = 0
